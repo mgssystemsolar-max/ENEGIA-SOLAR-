@@ -70,15 +70,16 @@ export default function App() {
           <h2 className="text-3xl lg:text-5xl font-black mb-4">Quanto você vai <span className="text-solar-orange underline">poupar</span>?</h2>
           <p className="text-gray-500">Arraste o simulador abaixo e veja o poder do sol no seu bolso.</p>
         </div>
-        <div className="container mx-auto px-6 max-w-5xl">
-          <div className="bg-solar-dark rounded-[3rem] p-8 lg:p-16 flex flex-col lg:flex-row gap-12 items-center border-b-8 border-solar-orange shadow-2xl">
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
+          <div className="bg-solar-dark rounded-3xl lg:rounded-[3rem] p-6 md:p-10 lg:p-16 flex flex-col lg:flex-row gap-8 lg:gap-12 items-center border-b-4 lg:border-b-8 border-solar-orange shadow-2xl">
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              className="w-full lg:w-1/2 bg-white/5 p-8 rounded-3xl border border-white/10 space-y-8"
+              whileTap={{ scale: 0.98 }}
+              className="w-full lg:w-1/2 bg-white/5 p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-white/10 space-y-6 lg:space-y-8"
             >
               <div className="space-y-4">
-                <label className="text-white font-bold block">Valor da sua conta mensal:</label>
-                <div className="text-4xl font-black text-solar-orange">{valorContaFormatado}</div>
+                <label className="text-white font-bold block text-sm lg:text-base">Valor da sua conta mensal:</label>
+                <div className="text-3xl md:text-4xl font-black text-solar-orange break-words">{valorContaFormatado}</div>
                 <input 
                   type="range" 
                   min="200" 
@@ -86,13 +87,14 @@ export default function App() {
                   step="50" 
                   value={contaMensal}
                   onChange={(e) => setContaMensal(Number(e.target.value))}
-                  className="w-full h-3 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-solar-orange" 
+                  className="w-full h-4 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-solar-orange touch-none" 
                 />
               </div>
             </motion.div>
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              className="w-full lg:w-1/2 bg-white/5 p-8 rounded-3xl text-center border border-white/10"
+              whileTap={{ scale: 0.98 }}
+              className="w-full lg:w-1/2 bg-white/5 p-6 lg:p-8 rounded-2xl lg:rounded-3xl text-center border border-white/10"
             >
               <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Economia em 25 Anos</p>
               <motion.div
@@ -100,13 +102,13 @@ export default function App() {
                 initial={{ scale: 0.9, opacity: 0.5 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="text-4xl lg:text-5xl font-black text-white mb-6"
+                className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 break-words"
               >
                 {economia25Anos}
               </motion.div>
               <a 
                 href={`https://wa.me/5588999999999?text=Quero economizar R$ ${contaMensal} por mês!`} 
-                className="block bg-green-500 text-white font-bold py-4 rounded-2xl hover:bg-green-600 transition shadow-lg"
+                className="block bg-green-500 text-white font-bold py-3 lg:py-4 px-4 rounded-xl lg:rounded-2xl hover:bg-green-600 transition shadow-lg text-sm lg:text-base"
               >
                 RECEBER MEU PROJETO GRÁTIS
               </a>
