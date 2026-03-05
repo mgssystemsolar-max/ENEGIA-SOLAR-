@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { useState } from 'react';
+import { motion } from 'motion/react';
 
 export default function App() {
   const [contaMensal, setContaMensal] = useState(500);
@@ -88,7 +89,15 @@ export default function App() {
             </div>
             <div className="w-full lg:w-1/2 bg-white/5 p-8 rounded-3xl text-center border border-white/10">
               <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Economia em 25 Anos</p>
-              <div className="text-4xl lg:text-5xl font-black text-white mb-6">{economia25Anos}</div>
+              <motion.div
+                key={contaMensal}
+                initial={{ scale: 0.9, opacity: 0.5 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="text-4xl lg:text-5xl font-black text-white mb-6"
+              >
+                {economia25Anos}
+              </motion.div>
               <a 
                 href={`https://wa.me/5588999999999?text=Quero economizar R$ ${contaMensal} por mês!`} 
                 className="block bg-green-500 text-white font-bold py-4 rounded-2xl hover:bg-green-600 transition shadow-lg"
