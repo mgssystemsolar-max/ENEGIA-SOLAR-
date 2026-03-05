@@ -74,26 +74,37 @@ export default function App() {
           <div className="bg-solar-dark rounded-3xl lg:rounded-[3rem] p-6 md:p-10 lg:p-16 flex flex-col lg:flex-row gap-8 lg:gap-12 items-center border-b-4 lg:border-b-8 border-solar-orange shadow-2xl">
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.99 }}
               className="w-full lg:w-1/2 bg-white/5 p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-white/10 space-y-6 lg:space-y-8"
             >
-              <div className="space-y-4">
-                <label className="text-white font-bold block text-sm lg:text-base">Valor da sua conta mensal:</label>
-                <div className="text-3xl md:text-4xl font-black text-solar-orange break-words">{valorContaFormatado}</div>
-                <input 
-                  type="range" 
-                  min="200" 
-                  max="10000" 
-                  step="50" 
-                  value={contaMensal}
-                  onChange={(e) => setContaMensal(Number(e.target.value))}
-                  className="w-full h-4 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-solar-orange touch-none" 
-                />
+              <div className="space-y-6">
+                <div className="flex justify-between items-end">
+                  <label className="text-white font-bold text-sm md:text-base">Valor da sua conta mensal:</label>
+                </div>
+                <div className="text-3xl sm:text-4xl font-black text-solar-orange break-words tracking-tight">
+                  {valorContaFormatado}
+                </div>
+                <div className="relative w-full pt-2">
+                  <input 
+                    type="range" 
+                    min="200" 
+                    max="10000" 
+                    step="50" 
+                    value={contaMensal}
+                    onChange={(e) => setContaMensal(Number(e.target.value))}
+                    className="w-full range-lg touch-none"
+                    aria-label="Definir valor da conta mensal"
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 mt-3 font-medium font-mono">
+                    <span>R$ 200</span>
+                    <span>R$ 10.000</span>
+                  </div>
+                </div>
               </div>
             </motion.div>
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.99 }}
               className="w-full lg:w-1/2 bg-white/5 p-6 lg:p-8 rounded-2xl lg:rounded-3xl text-center border border-white/10"
             >
               <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Economia em 25 Anos</p>
@@ -102,7 +113,7 @@ export default function App() {
                 initial={{ scale: 0.9, opacity: 0.5 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 break-words"
+                className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-6 break-words tracking-tight"
               >
                 {economia25Anos}
               </motion.div>
