@@ -7,8 +7,38 @@ import { motion } from 'motion/react';
 
 export default function App() {
   const [contaMensal, setContaMensal] = useState(500);
-  const [openFaq1, setOpenFaq1] = useState(false);
-  const [openFaq2, setOpenFaq2] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  const faqs = [
+    {
+      question: "O sistema funciona em dias de chuva?",
+      answer: "Sim! O sistema funciona com a luz do sol (irradiação), não com o calor. Mesmo nublado ou chovendo, há geração, apenas em menor intensidade."
+    },
+    {
+      question: "Qual a garantia dos equipamentos?",
+      answer: "Trabalhamos com os melhores fabricantes do mercado. As placas possuem garantia de performance de até 25 anos."
+    },
+    {
+      question: "Com que frequência o sistema precisa de manutenção?",
+      answer: "A manutenção é mínima. Basicamente uma limpeza das placas a cada 6 meses ou 1 ano, dependendo da poeira do local. A chuva ajuda a limpar naturalmente."
+    },
+    {
+      question: "Em quanto tempo tenho o retorno do investimento?",
+      answer: "O retorno (payback) médio é de 2 a 4 anos. Como o sistema dura 25 anos ou mais, você terá mais de 20 anos de lucro puro."
+    },
+    {
+      question: "Quanto posso economizar em 5 ou 10 anos?",
+      answer: `A economia é cumulativa. Em 5 anos, você terá economizado aproximadamente ${(contaMensal * 0.9 * 12 * 5).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}. Em 10 anos, esse valor salta para ${(contaMensal * 0.9 * 12 * 10).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}!`
+    },
+    {
+      question: "O que acontece se eu gerar mais energia do que consumo?",
+      answer: "O excedente vira créditos energéticos que ficam válidos por 60 meses. Você pode usá-los em meses de menor geração ou abater no consumo de outro imóvel na mesma área de concessão."
+    },
+    {
+      question: "Como funciona a instalação?",
+      answer: "É rápida e sem grandes obras. Nossa equipe técnica instala as estruturas e painéis no telhado, conecta ao inversor e cuida de toda a homologação junto à concessionária de energia."
+    }
+  ];
 
   const economia25Anos = (contaMensal * 0.9 * 12 * 25).toLocaleString('pt-BR', {
     style: 'currency',
@@ -133,34 +163,27 @@ export default function App() {
           <h2 className="text-3xl lg:text-5xl font-black mb-4 text-solar-dark">Dúvidas <span className="text-solar-orange">Frequentes</span></h2>
         </div>
         <div className="container mx-auto px-6 max-w-3xl space-y-4">
-          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <button 
-              onClick={() => setOpenFaq1(!openFaq1)} 
-              className="w-full p-6 text-left flex justify-between items-center font-bold text-lg text-solar-dark"
-            >
-              O sistema funciona em dias de chuva?
-              <i className={`fas fa-chevron-down text-solar-orange transition ${openFaq1 ? 'rotate-180' : ''}`}></i>
-            </button>
-            {openFaq1 && (
-              <div className="px-6 pb-6 text-gray-500 leading-relaxed">
-                Sim! O sistema funciona com a luz do sol (irradiação), não com o calor. Mesmo nublado ou chovendo, há geração, apenas em menor intensidade.
-              </div>
-            )}
-          </div>
-          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <button 
-              onClick={() => setOpenFaq2(!openFaq2)} 
-              className="w-full p-6 text-left flex justify-between items-center font-bold text-lg text-solar-dark"
-            >
-              Qual a garantia dos equipamentos?
-              <i className={`fas fa-chevron-down text-solar-orange transition ${openFaq2 ? 'rotate-180' : ''}`}></i>
-            </button>
-            {openFaq2 && (
-              <div className="px-6 pb-6 text-gray-500 leading-relaxed">
-                Trabalhamos com os melhores fabricantes do mercado. As placas possuem garantia de performance de até 25 anos.
-              </div>
-            )}
-          </div>
+          {faqs.map((faq, index) => (
+            <div key={index} className="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <button 
+                onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)} 
+                className="w-full p-6 text-left flex justify-between items-center font-bold text-lg text-solar-dark hover:bg-gray-50 transition"
+              >
+                {faq.question}
+                <i className={`fas fa-chevron-down text-solar-orange transition-transform duration-300 ${openFaqIndex === index ? 'rotate-180' : ''}`}></i>
+              </button>
+              <motion.div 
+                initial={false}
+                animate={{ height: openFaqIndex === index ? "auto" : 0, opacity: openFaqIndex === index ? 1 : 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <div className="px-6 pb-6 text-gray-500 leading-relaxed">
+                  {faq.answer}
+                </div>
+              </motion.div>
+            </div>
+          ))}
         </div>
       </section>
 
