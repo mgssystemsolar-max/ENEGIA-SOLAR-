@@ -11,6 +11,83 @@ export default function App() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    whatsapp: '',
+    city: '',
+    concessionaria: '',
+    billValue: ''
+  });
+  const [formErrors, setFormErrors] = useState({
+    name: '',
+    whatsapp: '',
+    city: '',
+    billValue: ''
+  });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (formErrors[name as keyof typeof formErrors]) {
+      setFormErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { name: '', whatsapp: '', city: '', billValue: '' };
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Nome é obrigatório';
+      isValid = false;
+    }
+    if (!formData.whatsapp.trim()) {
+      newErrors.whatsapp = 'WhatsApp é obrigatório';
+      isValid = false;
+    }
+    if (!formData.city.trim()) {
+      newErrors.city = 'Cidade/UF é obrigatório';
+      isValid = false;
+    }
+    if (!formData.billValue.trim()) {
+      newErrors.billValue = 'Valor da conta é obrigatório';
+      isValid = false;
+    }
+
+    setFormErrors(newErrors);
+    return isValid;
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      const message = `Olá, meu nome é ${formData.name}. Sou de ${formData.city}. Minha conta de luz é R$ ${formData.billValue} (${formData.concessionaria}). Gostaria de um orçamento.`;
+      const encodedMessage = encodeURIComponent(message);
+      window.open(`https://wa.me/message/24V75JFH4PNMB1?text=${encodedMessage}`, "_blank");
+    }
+  };
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [projects, setProjects] = useState([
     { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE" },
@@ -33,6 +110,20 @@ export default function App() {
     if (window.confirm("Tem certeza que deseja excluir este projeto?")) {
       const newProjects = projects.filter((_, i) => i !== index);
       setProjects(newProjects);
+    }
+  };
+
+  const handleShareProject = (project: { title: string, loc: string }) => {
+    const text = `Confira este projeto da MgS System Solar: ${project.title} em ${project.loc}. Economia e qualidade!`;
+    if (navigator.share) {
+      navigator.share({
+        title: 'MgS System Solar',
+        text: text,
+        url: window.location.href,
+      }).catch((error) => console.log('Error sharing', error));
+    } else {
+      const encodedText = encodeURIComponent(`${text} ${window.location.href}`);
+      window.open(`https://wa.me/?text=${encodedText}`, '_blank');
     }
   };
 
@@ -337,10 +428,19 @@ export default function App() {
                     </p>
                   </div>
                 </div>
+                
+                <button 
+                  onClick={(e) => { e.stopPropagation(); handleShareProject(project); }}
+                  className="absolute top-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-solar-orange hover:border-solar-orange transition-all duration-300 z-20 opacity-0 group-hover:opacity-100 transform translate-y-[-10px] group-hover:translate-y-0"
+                  title="Compartilhar"
+                >
+                  <i className="fas fa-share-alt"></i>
+                </button>
+
                 {isAdmin && (
                   <button 
                     onClick={(e) => { e.stopPropagation(); handleDeleteProject(i); }}
-                    className="absolute top-4 right-4 bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition z-20"
+                    className="absolute top-4 left-4 bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition z-20"
                     title="Excluir Projeto"
                   >
                     <i className="fas fa-trash-alt"></i>
@@ -578,37 +678,71 @@ export default function App() {
               <h2 className="text-3xl lg:text-4xl font-black text-solar-dark mb-4">Solicite seu <span className="text-solar-orange">Orçamento Gratuito</span></h2>
               <p className="text-gray-500">Preencha os dados abaixo e receba uma proposta personalizada para sua casa ou empresa.</p>
             </div>
-            <form className="space-y-6" onSubmit={(e) => {
-              e.preventDefault();
-              window.open("https://wa.me/message/24V75JFH4PNMB1", "_blank");
-            }}>
+            <form className="space-y-6" onSubmit={handleFormSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700 ml-1">Nome Completo</label>
-                  <input type="text" placeholder="Seu nome" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition" />
+                  <label className="text-sm font-bold text-gray-700 ml-1">Nome Completo <span className="text-red-500">*</span></label>
+                  <input 
+                    type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Seu nome" 
+                    className={`w-full bg-gray-50 border ${formErrors.name ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
+                  />
+                  {formErrors.name && <p className="text-red-500 text-xs ml-1">{formErrors.name}</p>}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700 ml-1">WhatsApp</label>
-                  <input type="tel" placeholder="(88) 99999-9999" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition" />
+                  <label className="text-sm font-bold text-gray-700 ml-1">WhatsApp <span className="text-red-500">*</span></label>
+                  <input 
+                    type="tel" 
+                    name="whatsapp"
+                    value={formData.whatsapp}
+                    onChange={handleInputChange}
+                    placeholder="(88) 99999-9999" 
+                    className={`w-full bg-gray-50 border ${formErrors.whatsapp ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
+                  />
+                  {formErrors.whatsapp && <p className="text-red-500 text-xs ml-1">{formErrors.whatsapp}</p>}
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700 ml-1">Cidade/UF</label>
-                  <input type="text" placeholder="Ex: Juazeiro do Norte, CE" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition" />
+                  <label className="text-sm font-bold text-gray-700 ml-1">Cidade/UF <span className="text-red-500">*</span></label>
+                  <input 
+                    type="text" 
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    placeholder="Ex: Juazeiro do Norte, CE" 
+                    className={`w-full bg-gray-50 border ${formErrors.city ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
+                  />
+                  {formErrors.city && <p className="text-red-500 text-xs ml-1">{formErrors.city}</p>}
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700 ml-1">Concessionária</label>
-                  <select className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition text-gray-600">
-                    <option>Selecione...</option>
-                    <option>Enel</option>
-                    <option>Outra</option>
+                  <select 
+                    name="concessionaria"
+                    value={formData.concessionaria}
+                    onChange={handleInputChange}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition text-gray-600"
+                  >
+                    <option value="">Selecione...</option>
+                    <option value="Enel">Enel</option>
+                    <option value="Outra">Outra</option>
                   </select>
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700 ml-1">Valor Médio da Conta de Luz (R$)</label>
-                <input type="number" placeholder="Ex: 500,00" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition" />
+                <label className="text-sm font-bold text-gray-700 ml-1">Valor Médio da Conta de Luz (R$) <span className="text-red-500">*</span></label>
+                <input 
+                  type="number" 
+                  name="billValue"
+                  value={formData.billValue}
+                  onChange={handleInputChange}
+                  placeholder="Ex: 500,00" 
+                  className={`w-full bg-gray-50 border ${formErrors.billValue ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
+                />
+                {formErrors.billValue && <p className="text-red-500 text-xs ml-1">{formErrors.billValue}</p>}
               </div>
               <button className="w-full bg-solar-orange text-white font-bold text-lg py-4 rounded-xl hover:bg-orange-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                 Enviar Solicitação
@@ -645,6 +779,23 @@ export default function App() {
           © 2026 MgS System Solar - Todos os direitos reservados.
         </div>
       </footer>
+
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            onClick={scrollToTop}
+            className="fixed bottom-24 right-8 bg-solar-orange text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-orange-600 transition z-40 focus:outline-none"
+            whileHover={{ y: -5 }}
+            whileTap={{ scale: 0.9 }}
+            title="Voltar ao topo"
+          >
+            <i className="fas fa-arrow-up"></i>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <a href="https://wa.me/message/24V75JFH4PNMB1" target="_blank" rel="noopener noreferrer" className="fixed bottom-8 right-8 bg-[#25d366] text-white p-4 rounded-full shadow-2xl z-50 text-3xl hover:scale-110 transition">
         <i className="fab fa-whatsapp"></i>
