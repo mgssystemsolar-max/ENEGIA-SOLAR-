@@ -578,7 +578,10 @@ export default function App() {
               <h2 className="text-3xl lg:text-4xl font-black text-solar-dark mb-4">Solicite seu <span className="text-solar-orange">Orçamento Gratuito</span></h2>
               <p className="text-gray-500">Preencha os dados abaixo e receba uma proposta personalizada para sua casa ou empresa.</p>
             </div>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={(e) => {
+              e.preventDefault();
+              window.open("https://wa.me/message/24V75JFH4PNMB1", "_blank");
+            }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700 ml-1">Nome Completo</label>
