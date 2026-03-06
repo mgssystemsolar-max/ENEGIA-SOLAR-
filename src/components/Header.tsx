@@ -34,6 +34,7 @@ export default function Header({ LOGO_URL, onAdminLogin, darkMode, toggleDarkMod
         <div className="hidden md:flex space-x-8 font-semibold text-sm uppercase tracking-wider">
           <a href="#home" className="hover:text-solar-orange transition">Início</a>
           <a href="#calculadora" className="hover:text-solar-orange transition">Simulador</a>
+          <a href="#conhecimento" className="hover:text-solar-orange transition">Conhecimento</a>
           <a href="#faq" className="hover:text-solar-orange transition">Dúvidas</a>
         </div>
         <div className="flex items-center gap-4">

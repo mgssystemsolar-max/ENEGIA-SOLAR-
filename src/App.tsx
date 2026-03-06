@@ -7,9 +7,11 @@ import BackToTop from './components/BackToTop';
 const Partners = lazy(() => import('./components/Partners'));
 const Calculator = lazy(() => import('./components/Calculator'));
 const Certifications = lazy(() => import('./components/Certifications'));
+const RegionalImpact = lazy(() => import('./components/RegionalImpact'));
 const Portfolio = lazy(() => import('./components/Portfolio'));
 const Testimonials = lazy(() => import('./components/Testimonials'));
 const Expertise = lazy(() => import('./components/Expertise'));
+const SolarKnowledge = lazy(() => import('./components/SolarKnowledge'));
 const FAQ = lazy(() => import('./components/FAQ'));
 const PostSales = lazy(() => import('./components/PostSales'));
 const Contact = lazy(() => import('./components/Contact'));
@@ -45,9 +47,11 @@ export default function App() {
         <Partners />
         <Calculator />
         <Certifications />
+        <RegionalImpact />
         <Portfolio isAdmin={isAdmin} />
         <Testimonials />
         <Expertise />
+        <SolarKnowledge />
         <FAQ />
         <PostSales />
         <Contact />
