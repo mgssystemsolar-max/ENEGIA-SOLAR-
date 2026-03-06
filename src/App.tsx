@@ -95,6 +95,18 @@ export default function App() {
         </div>
       </section>
 
+      {/* Partner Logos Section */}
+      <section className="py-10 bg-white border-b border-gray-100">
+        <div className="container mx-auto px-6">
+          <p className="text-center text-gray-400 text-sm font-bold uppercase tracking-widest mb-8">Trabalhamos com as melhores marcas mundiais</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+            {['WEG', 'Canadian Solar', 'Growatt', 'Fronius', 'BYD'].map((brand) => (
+              <span key={brand} className="text-xl md:text-2xl font-black text-gray-800 uppercase">{brand}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="calculadora" className="py-24 bg-white">
         <div className="container mx-auto px-6 text-center mb-12">
           <h2 className="text-3xl lg:text-5xl font-black mb-4">Quanto você vai <span className="text-solar-orange underline">poupar</span>?</h2>
@@ -154,6 +166,63 @@ export default function App() {
                 Receber Meu Projeto Grátis
               </a>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Certifications & Warranties Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: "fa-certificate", title: "Certificação NR10 e NR35", desc: "Equipe técnica qualificada e segura." },
+              { icon: "fa-shield-alt", title: "25 Anos de Garantia", desc: "Performance garantida pelos fabricantes." },
+              { icon: "fa-hard-hat", title: "Instalação Premium", desc: "Acabamento impecável e sem sujeira." },
+              { icon: "fa-bolt", title: "Homologação Rápida", desc: "Cuidamos de toda a burocracia." }
+            ].map((item, i) => (
+              <div key={i} className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition text-center group">
+                <div className="w-16 h-16 bg-solar-orange/10 text-solar-orange rounded-full flex items-center justify-center text-2xl mx-auto mb-6 group-hover:bg-solar-orange group-hover:text-white transition">
+                  <i className={`fas ${item.icon}`}></i>
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-solar-dark">{item.title}</h3>
+                <p className="text-gray-500 text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Portfolio Section */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-solar-orange font-bold tracking-[0.2em] text-sm uppercase">Nosso Portfólio</span>
+            <h2 className="text-3xl lg:text-5xl font-black mt-2 mb-6 text-solar-dark">Obras que geram <span className="text-solar-orange underline">valor</span></h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800", title: "Residência Alto Padrão", loc: "Eusébio, CE" },
+              { img: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6f?auto=format&fit=crop&q=80&w=800", title: "Indústria Têxtil", loc: "Maracanaú, CE" },
+              { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800", title: "Comércio Local", loc: "Fortaleza, CE" },
+            ].map((project, i) => (
+              <div key={i} className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer">
+                <img 
+                  src={project.img} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-8">
+                  <h3 className="text-white font-bold text-xl">{project.title}</h3>
+                  <p className="text-solar-orange text-sm font-bold uppercase tracking-wider">{project.loc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <a href="https://wa.me/5588999999999" className="inline-block border-2 border-solar-dark text-solar-dark px-8 py-3 rounded-full font-bold hover:bg-solar-dark hover:text-white transition">
+              Ver Mais Projetos no Instagram
+            </a>
           </div>
         </div>
       </section>
