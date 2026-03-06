@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import MysteryButton from './MysteryButton';
 
 interface PortfolioProps {
   isAdmin: boolean;
@@ -116,7 +117,10 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
             </div>
           )}
         </div>
-        <div className="text-center mt-12">
+        
+        <div className="flex flex-col items-center gap-6 mt-12">
+          <MysteryButton text="Veja a Luz que Inspira Nossas Obras" />
+          
           <a href="https://www.instagram.com/marciogoncalvesda176/" target="_blank" rel="noopener noreferrer" className="inline-block border-2 border-solar-dark dark:border-white text-solar-dark dark:text-white px-8 py-3 rounded-full font-bold hover:bg-solar-dark hover:text-white dark:hover:bg-white dark:hover:text-solar-dark transition">
             Ver Mais Projetos no Instagram
           </a>

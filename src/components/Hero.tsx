@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import MysteryButton from './MysteryButton';
 
 export default function Hero() {
   const ref = useRef(null);
@@ -36,11 +37,14 @@ export default function Hero() {
           <p className="text-gray-500 dark:text-gray-400 text-lg mb-10 max-w-xl mx-auto lg:mx-0">
             Reduza sua conta de luz em até 95%. Projetos personalizados da MgS System Solar para <strong>Juazeiro do Norte e toda a região do Cariri</strong> com tecnologia de ponta e garantia de 25 anos.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
             <a href="#calculadora" className="bg-solar-orange text-white px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition shadow-xl text-center hover:bg-orange-600">SIMULAR ECONOMIA</a>
             <a href="https://wa.me/message/24V75JFH4PNMB1" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-200 dark:border-gray-700 px-8 py-4 rounded-xl font-bold text-lg hover:border-solar-orange dark:hover:border-solar-orange transition flex items-center justify-center gap-2 text-gray-700 dark:text-white">
               <i className="fab fa-whatsapp text-green-500"></i> Falar com Especialista
             </a>
+          </div>
+          <div className="flex justify-center lg:justify-start">
+            <MysteryButton text="Curioso? Acesse e verá o Mestre Jesus" />
           </div>
         </motion.div>
         

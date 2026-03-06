@@ -1,4 +1,5 @@
 import React from 'react';
+import MysteryButton from './MysteryButton';
 
 export default function Expertise() {
   return (
@@ -11,7 +12,7 @@ export default function Expertise() {
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">Muito mais que instalar placas, a MgS System Solar cuida de todo o ciclo do seu projeto para garantir eficiência e segurança.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {[
             {
               icon: "fa-search-dollar",
@@ -42,6 +43,10 @@ export default function Expertise() {
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{item.desc}</p>
             </div>
           ))}
+        </div>
+
+        <div className="flex justify-center">
+          <MysteryButton text="Descubra a Luz que Guia Nossos Passos" />
         </div>
       </div>
     </section>
