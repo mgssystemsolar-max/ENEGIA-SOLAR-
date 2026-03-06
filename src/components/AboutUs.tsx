@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function AboutUs() {
+  const [isZoomed, setIsZoomed] = useState(false);
+
   return (
     <section id="quem-somos" className="py-24 bg-white dark:bg-solar-dark transition-colors duration-300 overflow-hidden">
       <div className="container mx-auto px-6">
@@ -79,15 +81,24 @@ export default function AboutUs() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 mb-10 p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 max-w-md">
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Intelbras_logo.svg/512px-Intelbras_logo.svg.png" 
-                alt="Certificado Intelbras" 
-                className="h-8 w-auto object-contain"
-                referrerPolicy="no-referrer"
-              />
+            <div 
+              className="flex items-center gap-4 mb-10 p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 max-w-md cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 transition-colors group"
+              onClick={() => setIsZoomed(true)}
+              title="Clique para ampliar o certificado"
+            >
+              <div className="relative">
+                <img 
+                  src="https://drive.google.com/thumbnail?id=1FtMaH3vOIaxIt6pjuTKXQTlMJJWCTcn7&sz=w1000" 
+                  alt="Certificado Técnico" 
+                  className="h-16 w-auto object-contain rounded-md"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-md flex items-center justify-center">
+                  <i className="fas fa-search-plus text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md"></i>
+                </div>
+              </div>
               <div>
-                <p className="font-bold text-solar-dark dark:text-white text-sm uppercase tracking-wide">Técnico Certificado</p>
+                <p className="font-bold text-solar-dark dark:text-white text-sm uppercase tracking-wide group-hover:text-solar-orange transition-colors">Técnico Certificado</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Especialista em soluções Intelbras</p>
               </div>
             </div>
@@ -98,6 +109,29 @@ export default function AboutUs() {
           </div>
         </div>
       </div>
+
+      {/* Zoom Modal */}
+      {isZoomed && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-fade-in cursor-zoom-out"
+          onClick={() => setIsZoomed(false)}
+        >
+          <div className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center">
+            <img 
+              src="https://drive.google.com/thumbnail?id=1FtMaH3vOIaxIt6pjuTKXQTlMJJWCTcn7&sz=w1000" 
+              alt="Certificado Técnico Ampliado" 
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl animate-scale-up"
+              referrerPolicy="no-referrer"
+            />
+            <button 
+              className="absolute -top-12 right-0 text-white hover:text-solar-orange transition-colors text-xl font-bold flex items-center gap-2"
+              onClick={() => setIsZoomed(false)}
+            >
+              <i className="fas fa-times"></i> Fechar
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
