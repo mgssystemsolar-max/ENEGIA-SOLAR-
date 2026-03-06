@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import MysteryButton from './MysteryButton';
 
 interface PortfolioProps {
@@ -9,10 +9,22 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [toast, setToast] = useState<{ show: boolean, message: string } | null>(null);
   const [projects, setProjects] = useState([
-    { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE" },
-    { img: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6f?auto=format&fit=crop&q=80&w=800", title: "Indústria Têxtil", loc: "Barbalha, CE" },
-    { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800", title: "Comércio Local", loc: "Crato, CE" },
+    { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE" },
+    { img: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6f?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Indústria Têxtil", loc: "Barbalha, CE" },
+    { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Comércio Local", loc: "Crato, CE" },
   ]);
+
+  // Load projects from localStorage on mount
+  useEffect(() => {
+    const savedProjects = localStorage.getItem('mgs_portfolio_projects');
+    if (savedProjects) {
+      try {
+        setProjects(JSON.parse(savedProjects));
+      } catch (e) {
+        console.error("Failed to parse saved projects", e);
+      }
+    }
+  }, []);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -21,7 +33,7 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
       const title = prompt("Digite o nome do projeto:") || "Novo Projeto";
       const loc = prompt("Digite a localização:") || "Cariri, CE";
       
-      setProjects([...projects, { img: imageUrl, title, loc }]);
+      setProjects(prev => [...prev, { img: imageUrl, title, loc }]);
     }
   };
 
@@ -32,6 +44,12 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
       setToast({ show: true, message: "Projeto removido com sucesso!" });
       setTimeout(() => setToast(null), 3000);
     }
+  };
+
+  const handleSaveProjects = () => {
+    localStorage.setItem('mgs_portfolio_projects', JSON.stringify(projects));
+    setToast({ show: true, message: "Alterações salvas com sucesso!" });
+    setTimeout(() => setToast(null), 3000);
   };
 
   const handleShareProject = (project: { title: string, loc: string }) => {
@@ -55,6 +73,19 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
           <span className="text-solar-orange font-bold tracking-[0.2em] text-sm uppercase">Nosso Portfólio</span>
           <h2 className="text-3xl lg:text-5xl font-black mt-2 mb-6 text-solar-dark dark:text-white">Obras que geram <span className="text-solar-orange underline">valor</span></h2>
         </div>
+        
+        {/* Admin Controls */}
+        {isAdmin && (
+          <div className="flex justify-end mb-6">
+            <button 
+              onClick={handleSaveProjects}
+              className="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-700 transition shadow-lg flex items-center gap-2"
+            >
+              <i className="fas fa-save"></i> Salvar Alterações
+            </button>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {projects.map((project, i) => (
             <div key={i} className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500">
@@ -64,6 +95,9 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
                 className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
                 referrerPolicy="no-referrer"
                 loading='lazy'
+                width="800"
+                height="600"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-8">
                 <div className="transform translate-y-4 group-hover:translate-y-0 transition duration-500">
