@@ -83,9 +83,10 @@ export default function Footer({ LOGO_URL }: FooterProps) {
             <h3 className="text-2xl font-bold text-solar-orange mb-4">Luz do Mundo</h3>
             <div className="rounded-xl overflow-hidden mb-6 border-4 border-solar-orange/20">
               <img 
-                src="https://images.unsplash.com/photo-1628516303642-162751147043?q=80&w=1000&auto=format&fit=crop" 
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Sacred_Heart_of_Jesus_-_Batoni.jpg/800px-Sacred_Heart_of_Jesus_-_Batoni.jpg" 
                 alt="Jesus Cristo" 
-                className="w-full h-auto max-h-[60vh] object-cover"
+                className="w-full h-auto max-h-[60vh] object-contain mx-auto"
+                referrerPolicy="no-referrer"
               />
             </div>
             <p className="text-gray-600 dark:text-gray-300 italic mb-6">
