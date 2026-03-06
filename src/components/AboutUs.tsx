@@ -10,18 +10,19 @@ export default function AboutUs() {
             <div className="absolute -top-10 -left-10 w-40 h-40 bg-solar-orange/10 rounded-full blur-3xl"></div>
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
             
-            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-white/5 transform hover:scale-[1.02] transition-transform duration-500">
+            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-white/5 transform hover:scale-[1.02] transition-transform duration-500 bg-gray-200 dark:bg-gray-800 min-h-[400px]">
               <img 
-                src="https://drive.google.com/uc?export=view&id=1fcNt8-3EcIZcrQtlo_y34ct5csQeLodr" 
+                src="https://drive.google.com/thumbnail?id=1fcNt8-3EcIZcrQtlo_y34ct5csQeLodr&sz=w1000" 
                 alt="Fundador MgS System Solar" 
-                className="w-full h-auto object-cover"
+                className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
                 loading="lazy"
               />
-              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-8">
-                <p className="text-white font-bold text-lg">Compromisso com você</p>
-                <p className="text-gray-300 text-sm">Márcio Gonçalves - Fundador</p>
-              </div>
+            </div>
+            <div className="mt-6 text-center">
+              <p className="text-solar-dark dark:text-white font-bold text-lg">Compromisso com você</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">Márcio Gonçalves - Fundador</p>
+              <p className="text-solar-orange font-bold text-xs uppercase mt-1 tracking-wider">Técnico em Eletrotécnica</p>
             </div>
             
             {/* Experience Badge */}
@@ -65,6 +66,19 @@ export default function AboutUs() {
                   <h4 className="font-bold text-solar-dark dark:text-white text-lg">Visão</h4>
                   <p className="text-sm text-gray-500 dark:text-gray-400">Ser a referência absoluta em qualidade e pós-venda no setor solar do Nordeste.</p>
                 </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 mb-10 p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 max-w-md">
+              <img 
+                src="https://drive.google.com/thumbnail?id=1n52Y50B7Am77t9yzAOpHdsVjrJ-TlVr8&sz=w1000" 
+                alt="Certificado Intelbras" 
+                className="h-12 w-auto object-contain"
+                referrerPolicy="no-referrer"
+              />
+              <div>
+                <p className="font-bold text-solar-dark dark:text-white text-sm uppercase tracking-wide">Técnico Certificado</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Especialista em soluções Intelbras</p>
               </div>
             </div>
 
