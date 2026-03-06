@@ -2,12 +2,70 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import { useState } from 'react';
-import { motion } from 'motion/react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   const [contaMensal, setContaMensal] = useState(500);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+
+  const testimonials = [
+    {
+      name: "Carlos Eduardo",
+      location: "Fortaleza, CE",
+      quote: "A melhor decisão que tomei para minha casa. A conta de energia caiu de R$ 800 para a taxa mínima. O atendimento da MgS foi impecável do início ao fim.",
+      role: "Residencial"
+    },
+    {
+      name: "Ana Paula Souza",
+      location: "Sobral, CE",
+      quote: "Instalei na minha empresa e o retorno foi muito rápido. A equipe técnica é muito qualificada e deixou tudo limpo e organizado. Recomendo demais!",
+      role: "Comercial"
+    },
+    {
+      name: "Roberto Mendes",
+      location: "Juazeiro do Norte, CE",
+      quote: "Estava com receio da obra, mas foi tudo muito rápido. Em 2 dias estava tudo funcionando. Hoje vejo o sol e só penso na economia que estou fazendo.",
+      role: "Residencial"
+    },
+    {
+      name: "Mariana Costa",
+      location: "Crato, CE",
+      quote: "Excelente investimento! A equipe me explicou tudo detalhadamente e o pós-venda é sensacional. Minha conta zerou praticamente.",
+      role: "Residencial"
+    },
+    {
+      name: "Ricardo Oliveira",
+      location: "Caucaia, CE",
+      quote: "Profissionalismo nota 10. O sistema está gerando mais do que o prometido. Muito satisfeito com a MgS System Solar.",
+      role: "Comercial"
+    }
+  ];
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setItemsPerPage(3);
+      } else if (window.innerWidth >= 768) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(1);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % (testimonials.length - itemsPerPage + 1));
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + (testimonials.length - itemsPerPage + 1)) % (testimonials.length - itemsPerPage + 1));
+  };
 
   const faqs = [
     {
@@ -121,7 +179,14 @@ export default function App() {
             >
               <div className="space-y-6">
                 <div className="flex justify-between items-end">
-                  <label className="text-white font-bold text-sm md:text-base">Valor da sua conta mensal:</label>
+                  <div className="flex items-center gap-2 group relative cursor-help">
+                    <label className="text-white font-bold text-sm md:text-base">Valor da sua conta mensal:</label>
+                    <div className="w-5 h-5 rounded-full border border-gray-500 text-gray-400 flex items-center justify-center text-xs font-serif italic hover:border-solar-orange hover:text-solar-orange transition">i</div>
+                    <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition pointer-events-none z-20 shadow-xl border border-gray-700">
+                      Este valor representa sua média mensal atual de gastos com energia elétrica. Use o slider para ajustar.
+                      <div className="absolute top-full left-4 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
                 </div>
                 <div className="text-2xl sm:text-3xl md:text-4xl font-black text-solar-orange break-words tracking-tight">
                   {valorContaFormatado}
@@ -149,7 +214,14 @@ export default function App() {
               whileTap={{ scale: 0.99 }}
               className="w-full lg:w-1/2 bg-white/5 p-5 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl text-center border border-white/10"
             >
-              <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Economia em 25 Anos</p>
+              <div className="flex items-center justify-center gap-2 mb-2 group relative cursor-help">
+                <p className="text-gray-400 uppercase text-xs font-bold tracking-widest">Economia em 25 Anos</p>
+                <div className="w-4 h-4 rounded-full border border-gray-600 text-gray-500 flex items-center justify-center text-[10px] font-serif italic hover:border-solar-orange hover:text-solar-orange transition">i</div>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition pointer-events-none z-20 shadow-xl border border-gray-700 text-left">
+                  Estimativa baseada na inflação energética média e eficiência do sistema ao longo de 25 anos. O retorno real pode variar.
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                </div>
+              </div>
               <motion.div
                 key={contaMensal}
                 initial={{ scale: 0.9, opacity: 0.5 }}
@@ -236,56 +308,77 @@ export default function App() {
             <p className="text-gray-500 max-w-2xl mx-auto text-lg">Veja o que nossos clientes estão dizendo sobre a economia e o atendimento da MgS System Solar.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Carlos Eduardo",
-                location: "Fortaleza, CE",
-                quote: "A melhor decisão que tomei para minha casa. A conta de energia caiu de R$ 800 para a taxa mínima. O atendimento da MgS foi impecável do início ao fim.",
-                role: "Residencial"
-              },
-              {
-                name: "Ana Paula Souza",
-                location: "Sobral, CE",
-                quote: "Instalei na minha empresa e o retorno foi muito rápido. A equipe técnica é muito qualificada e deixou tudo limpo e organizado. Recomendo demais!",
-                role: "Comercial"
-              },
-              {
-                name: "Roberto Mendes",
-                location: "Juazeiro do Norte, CE",
-                quote: "Estava com receio da obra, mas foi tudo muito rápido. Em 2 dias estava tudo funcionando. Hoje vejo o sol e só penso na economia que estou fazendo.",
-                role: "Residencial"
-              }
-            ].map((testimonial, index) => (
+          <div className="relative">
+            {/* Carousel Track */}
+            <div className="overflow-hidden">
               <motion.div 
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                whileHover={{ y: -10 }}
-                className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col h-full relative group"
+                className="flex -mx-4"
+                animate={{ x: `-${currentTestimonial * (100 / itemsPerPage)}%` }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
-                <div className="absolute top-6 right-8 text-6xl text-solar-orange/10 font-serif leading-none group-hover:text-solar-orange/20 transition-colors">"</div>
-                <div className="flex-grow">
-                  <div className="flex items-center gap-2 mb-4">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <i key={star} className="fas fa-star text-solar-orange text-sm"></i>
-                    ))}
+                {testimonials.map((testimonial, index) => (
+                  <div 
+                    key={index}
+                    className="min-w-full md:min-w-[50%] lg:min-w-[33.3333%] px-4 flex"
+                  >
+                    <motion.div 
+                      whileHover={{ y: -10 }}
+                      className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col h-full w-full relative group"
+                    >
+                      <div className="absolute top-6 right-8 text-6xl text-solar-orange/10 font-serif leading-none group-hover:text-solar-orange/20 transition-colors">"</div>
+                      <div className="flex-grow">
+                        <div className="flex items-center gap-2 mb-4">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <i key={star} className="fas fa-star text-solar-orange text-sm"></i>
+                          ))}
+                        </div>
+                        <p className="text-gray-600 italic mb-6 relative z-10 leading-relaxed">"{testimonial.quote}"</p>
+                      </div>
+                      <div className="flex items-center gap-4 mt-auto pt-6 border-t border-gray-100">
+                        <div className="w-12 h-12 bg-solar-dark rounded-full flex items-center justify-center text-white font-bold text-xl">
+                          {testimonial.name.charAt(0)}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-solar-dark">{testimonial.name}</h4>
+                          <p className="text-xs text-gray-400 uppercase tracking-wider">{testimonial.location}</p>
+                        </div>
+                      </div>
+                    </motion.div>
                   </div>
-                  <p className="text-gray-600 italic mb-6 relative z-10 leading-relaxed">"{testimonial.quote}"</p>
-                </div>
-                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-gray-100">
-                  <div className="w-12 h-12 bg-solar-dark rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-solar-dark">{testimonial.name}</h4>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider">{testimonial.location}</p>
-                  </div>
-                </div>
+                ))}
               </motion.div>
-            ))}
+            </div>
+
+            {/* Navigation Controls */}
+            <div className="flex flex-col items-center mt-12 gap-6">
+              <div className="flex gap-2">
+                {Array.from({ length: testimonials.length - itemsPerPage + 1 }).map((_, i) => (
+                  <button 
+                    key={i}
+                    onClick={() => setCurrentTestimonial(i)}
+                    className={`h-2 rounded-full transition-all duration-300 ${currentTestimonial === i ? 'bg-solar-orange w-8' : 'bg-gray-200 w-2 hover:bg-gray-300'}`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+              
+              <div className="flex gap-4">
+                <button 
+                  onClick={prevTestimonial} 
+                  className="w-12 h-12 rounded-full bg-white border border-gray-100 shadow-lg flex items-center justify-center text-solar-dark hover:bg-solar-orange hover:text-white transition group"
+                  aria-label="Previous testimonial"
+                >
+                  <i className="fas fa-chevron-left group-hover:-translate-x-1 transition-transform"></i>
+                </button>
+                <button 
+                  onClick={nextTestimonial} 
+                  className="w-12 h-12 rounded-full bg-white border border-gray-100 shadow-lg flex items-center justify-center text-solar-dark hover:bg-solar-orange hover:text-white transition group"
+                  aria-label="Next testimonial"
+                >
+                  <i className="fas fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
