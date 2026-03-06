@@ -54,6 +54,25 @@ export default function App() {
     }
   };
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    let error = '';
+
+    if (name === 'name' && !value.trim()) {
+      error = 'Nome é obrigatório';
+    } else if (name === 'whatsapp' && !value.trim()) {
+      error = 'WhatsApp é obrigatório';
+    } else if (name === 'city' && !value.trim()) {
+      error = 'Cidade/UF é obrigatório';
+    } else if (name === 'billValue' && !value.trim()) {
+      error = 'Valor da conta é obrigatório';
+    }
+
+    if (error) {
+      setFormErrors(prev => ({ ...prev, [name]: error }));
+    }
+  };
+
   const validateForm = () => {
     let isValid = true;
     const newErrors = { name: '', whatsapp: '', city: '', billValue: '' };
@@ -245,12 +264,14 @@ export default function App() {
     currency: 'BRL'
   });
 
+  const LOGO_URL = "https://placehold.co/200x60/png?text=MgS+System+Solar"; // Substitua pela URL da sua logo
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-solar-orange selection:text-white">
       <nav className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div onClick={handleLogoClick} className="text-2xl font-black text-gray-900 italic cursor-pointer select-none">
-            MgS <span className="text-solar-orange uppercase">System Solar</span>
+          <div onClick={handleLogoClick} className="cursor-pointer select-none">
+            <img src={LOGO_URL} alt="MgS System Solar" className="h-12 object-contain" />
           </div>
           <div className="hidden md:flex space-x-8 font-semibold text-sm uppercase tracking-wider">
             <a href="#home" className="hover:text-solar-orange transition">Início</a>
@@ -687,6 +708,7 @@ export default function App() {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
+                    onBlur={handleBlur}
                     placeholder="Seu nome" 
                     className={`w-full bg-gray-50 border ${formErrors.name ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
                   />
@@ -699,6 +721,7 @@ export default function App() {
                     name="whatsapp"
                     value={formData.whatsapp}
                     onChange={handleInputChange}
+                    onBlur={handleBlur}
                     placeholder="(88) 99999-9999" 
                     className={`w-full bg-gray-50 border ${formErrors.whatsapp ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
                   />
@@ -713,6 +736,7 @@ export default function App() {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
+                    onBlur={handleBlur}
                     placeholder="Ex: Juazeiro do Norte, CE" 
                     className={`w-full bg-gray-50 border ${formErrors.city ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
                   />
@@ -739,6 +763,7 @@ export default function App() {
                   name="billValue"
                   value={formData.billValue}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   placeholder="Ex: 500,00" 
                   className={`w-full bg-gray-50 border ${formErrors.billValue ? 'border-red-500' : 'border-gray-200'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition`} 
                 />
@@ -758,7 +783,7 @@ export default function App() {
       <footer className="bg-solar-dark text-white pt-20 pb-10">
         <div className="container mx-auto px-6 text-center md:text-left grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="text-2xl font-black italic mb-6 uppercase tracking-tighter">MgS <span className="text-solar-orange">System Solar</span></h3>
+            <img src={LOGO_URL} alt="MgS System Solar" className="h-16 mb-6 mx-auto md:mx-0 object-contain bg-white/10 rounded-lg p-2" />
             <p className="text-gray-400 text-sm">Especialistas em energia limpa e redução de custos. Atendemos residências e empresas com excelência.</p>
           </div>
           <div>
@@ -771,12 +796,35 @@ export default function App() {
             </div>
           </div>
           <div>
-            <h4 className="font-bold text-lg mb-6 border-l-4 border-solar-orange pl-4 uppercase">Endereço</h4>
-            <p className="text-gray-400 text-sm">Juazeiro do Norte, CE<br/>Atendimento em toda a região do Cariri (Crato, Barbalha e arredores). Consulte nossa disponibilidade.</p>
+            <h4 className="font-bold text-lg mb-6 border-l-4 border-solar-orange pl-4 uppercase">Contato & Endereço</h4>
+            <div className="text-gray-400 text-sm space-y-4">
+              <p>
+                <a href="mailto:mgssystemsolarclientes@gmail.com" className="hover:text-solar-orange transition flex items-center justify-center md:justify-start gap-2">
+                  <i className="fas fa-envelope text-solar-orange"></i>
+                  mgssystemsolarclientes@gmail.com
+                </a>
+              </p>
+              <p>
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=R.+DR.+MOZART+CARDOSO+DE+ALENCAR+95+BAIRRO+NOVO+JUAZEIRO" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-solar-orange transition flex items-start justify-center md:justify-start gap-2"
+                >
+                  <i className="fas fa-map-marker-alt text-solar-orange mt-1"></i>
+                  <span>
+                    R. Dr. Mozart Cardoso de Alencar, 95<br/>
+                    Bairro Novo Juazeiro<br/>
+                    Juazeiro do Norte - CE
+                  </span>
+                </a>
+              </p>
+            </div>
           </div>
         </div>
         <div className="container mx-auto px-6 mt-16 pt-8 border-t border-white/5 text-center text-xs text-gray-600">
-          © 2026 MgS System Solar - Todos os direitos reservados.
+          <p>© 2026 MgS System Solar - Todos os direitos reservados.</p>
+          <p className="mt-2 text-gray-700">CNPJ: 62.612.258/0001-04</p>
         </div>
       </footer>
 
