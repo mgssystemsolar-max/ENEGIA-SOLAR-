@@ -10,6 +10,7 @@ export default function App() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [isAdmin, setIsAdmin] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [projects, setProjects] = useState([
     { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE" },
@@ -26,6 +27,30 @@ export default function App() {
       
       setProjects([...projects, { img: imageUrl, title, loc }]);
     }
+  };
+
+  const handleDeleteProject = (index: number) => {
+    if (window.confirm("Tem certeza que deseja excluir este projeto?")) {
+      const newProjects = projects.filter((_, i) => i !== index);
+      setProjects(newProjects);
+    }
+  };
+
+  // Secret admin toggle: triple click on logo
+  const logoClickCount = useRef(0);
+  const handleLogoClick = () => {
+    logoClickCount.current += 1;
+    if (logoClickCount.current === 3) {
+      const password = prompt("Digite a senha de administrador:");
+      if (password === "mgs2026") {
+        setIsAdmin(true);
+        alert("Modo Administrador Ativado!");
+      } else {
+        alert("Senha incorreta.");
+      }
+      logoClickCount.current = 0;
+    }
+    setTimeout(() => { logoClickCount.current = 0; }, 2000);
   };
 
   const testimonials = [
@@ -133,7 +158,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-solar-orange selection:text-white">
       <nav className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-black text-gray-900 italic">
+          <div onClick={handleLogoClick} className="text-2xl font-black text-gray-900 italic cursor-pointer select-none">
             MgS <span className="text-solar-orange uppercase">System Solar</span>
           </div>
           <div className="hidden md:flex space-x-8 font-semibold text-sm uppercase tracking-wider">
@@ -154,7 +179,7 @@ export default function App() {
               Transforme o Sol em <br /><span className="text-solar-orange underline decoration-white/20">Economia Real</span>
             </h1>
             <p className="text-gray-400 text-lg mb-10 max-w-xl mx-auto lg:mx-0">
-              Reduza sua conta de luz em até 95%. Projetos personalizados da MgS System Solar com tecnologia de ponta e garantia de 25 anos.
+              Reduza sua conta de luz em até 95%. Projetos personalizados da MgS System Solar para <strong>Juazeiro do Norte e toda a região do Cariri</strong> com tecnologia de ponta e garantia de 25 anos.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a href="#calculadora" className="bg-solar-orange px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition shadow-xl text-center">SIMULAR ECONOMIA</a>
@@ -312,29 +337,40 @@ export default function App() {
                     </p>
                   </div>
                 </div>
+                {isAdmin && (
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); handleDeleteProject(i); }}
+                    className="absolute top-4 right-4 bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition z-20"
+                    title="Excluir Projeto"
+                  >
+                    <i className="fas fa-trash-alt"></i>
+                  </button>
+                )}
               </div>
             ))}
             
-            {/* Upload Card */}
-            <div 
-              onClick={() => fileInputRef.current?.click()}
-              className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer border-2 border-dashed border-gray-300 hover:border-solar-orange hover:bg-orange-50 transition-all duration-300 flex flex-col items-center justify-center gap-4"
-            >
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleImageUpload} 
-                accept="image/*" 
-                className="hidden" 
-              />
-              <div className="w-16 h-16 rounded-full bg-gray-100 group-hover:bg-solar-orange/10 flex items-center justify-center text-gray-400 group-hover:text-solar-orange transition-colors duration-300">
-                <i className="fas fa-plus text-2xl"></i>
+            {/* Upload Card - Only visible to Admin */}
+            {isAdmin && (
+              <div 
+                onClick={() => fileInputRef.current?.click()}
+                className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer border-2 border-dashed border-gray-300 hover:border-solar-orange hover:bg-orange-50 transition-all duration-300 flex flex-col items-center justify-center gap-4"
+              >
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleImageUpload} 
+                  accept="image/*" 
+                  className="hidden" 
+                />
+                <div className="w-16 h-16 rounded-full bg-gray-100 group-hover:bg-solar-orange/10 flex items-center justify-center text-gray-400 group-hover:text-solar-orange transition-colors duration-300">
+                  <i className="fas fa-plus text-2xl"></i>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-gray-500 font-bold group-hover:text-solar-orange transition-colors">Adicionar Obra</h3>
+                  <p className="text-xs text-gray-400 mt-1">Carregar imagem do PC</p>
+                </div>
               </div>
-              <div className="text-center">
-                <h3 className="text-gray-500 font-bold group-hover:text-solar-orange transition-colors">Adicionar Obra</h3>
-                <p className="text-xs text-gray-400 mt-1">Carregar imagem do PC</p>
-              </div>
-            </div>
+            )}
           </div>
           <div className="text-center mt-12">
             <a href="https://www.instagram.com/marciogoncalvesda176/" target="_blank" rel="noopener noreferrer" className="inline-block border-2 border-solar-dark text-solar-dark px-8 py-3 rounded-full font-bold hover:bg-solar-dark hover:text-white transition">
