@@ -59,7 +59,7 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
                 alt={project.title} 
                 className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:rotate-1"
                 referrerPolicy="no-referrer"
-                loading="lazy"
+                loading='lazy'
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-8">
                 <div className="transform translate-y-4 group-hover:translate-y-0 transition duration-500">
