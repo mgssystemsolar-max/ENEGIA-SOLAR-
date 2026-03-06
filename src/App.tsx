@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import BackToTop from './components/BackToTop';
@@ -17,11 +17,27 @@ const Footer = lazy(() => import('./components/Footer'));
 
 export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const LOGO_URL = "https://placehold.co/200x60/png?text=MgS+System+Solar"; // Substitua pela URL da sua logo
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-solar-orange selection:text-white">
-      <Header LOGO_URL={LOGO_URL} onAdminLogin={() => setIsAdmin(true)} />
+    <div className={`min-h-screen font-sans selection:bg-solar-orange selection:text-white transition-colors duration-300 ${darkMode ? 'bg-solar-dark text-white' : 'bg-gray-50 text-gray-900'}`}>
+      <Header 
+        LOGO_URL={LOGO_URL} 
+        onAdminLogin={() => setIsAdmin(true)} 
+        darkMode={darkMode} 
+        toggleDarkMode={toggleDarkMode} 
+      />
       
       <Hero />
 
