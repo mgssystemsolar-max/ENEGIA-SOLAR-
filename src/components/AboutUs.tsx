@@ -74,14 +74,12 @@ export default function AboutUs() {
             </div>
 
             <div className="flex items-center gap-4 mb-10 p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 max-w-md">
-              <div className="bg-white p-2 rounded-lg">
-                <img 
-                  src="https://drive.google.com/uc?export=view&id=1n52Y50B7Am77t9yzAOpHdsVjrJ-TlVr8" 
-                  alt="Certificado Intelbras" 
-                  className="h-16 w-auto object-contain"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Intelbras_logo.svg/512px-Intelbras_logo.svg.png" 
+                alt="Certificado Intelbras" 
+                className="h-8 w-auto object-contain"
+                referrerPolicy="no-referrer"
+              />
               <div>
                 <p className="font-bold text-solar-dark dark:text-white text-sm uppercase tracking-wide">Técnico Certificado</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Especialista em soluções Intelbras</p>

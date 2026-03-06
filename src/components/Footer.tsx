@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface FooterProps {
   LOGO_URL: string;
 }
 
 export default function Footer({ LOGO_URL }: FooterProps) {
+  const [showJesus, setShowJesus] = useState(false);
+
   return (
-    <footer className="bg-gray-100 dark:bg-solar-dark text-gray-600 dark:text-white pt-20 pb-10 transition-colors duration-300">
+    <footer className="bg-gray-100 dark:bg-solar-dark text-gray-600 dark:text-white pt-20 pb-10 transition-colors duration-300 relative">
       <div className="container mx-auto px-6 text-center md:text-left grid grid-cols-1 md:grid-cols-3 gap-12">
         <div>
           <img src={LOGO_URL} alt="MgS System Solar" className="h-16 mb-6 mx-auto md:mx-0 object-contain bg-white dark:bg-white/10 rounded-lg p-2 shadow-sm" />
@@ -48,10 +50,56 @@ export default function Footer({ LOGO_URL }: FooterProps) {
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-6 mt-16 pt-8 border-t border-gray-200 dark:border-white/5 text-center text-xs text-gray-500 dark:text-gray-600">
+
+      {/* Mensagem Inspiradora */}
+      <div className="container mx-auto px-6 mt-12 flex justify-center">
+        <div className="flex items-center gap-4 bg-white dark:bg-white/5 px-6 py-3 rounded-full shadow-sm border border-gray-100 dark:border-white/5 max-w-2xl">
+          <div className="relative group cursor-pointer" onClick={() => setShowJesus(true)}>
+            <img 
+              src="https://images.unsplash.com/photo-1541103554737-fe33e243b45c?auto=format&fit=crop&q=80&w=100&h=100" 
+              alt="Sol - Luz e Esperança" 
+              className="w-10 h-10 rounded-full object-cover border-2 border-solar-orange shrink-0 transition-transform transform group-hover:scale-110"
+              loading="lazy"
+            />
+            <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-solar-orange text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+              Clique aqui
+            </span>
+          </div>
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-300 italic text-center md:text-left">
+            "E a porta que Deus abre, ninguém fecha; e a que Ele fecha, é livramento."
+          </p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 mt-8 pt-8 border-t border-gray-200 dark:border-white/5 text-center text-xs text-gray-500 dark:text-gray-600">
         <p>© 2026 MgS System Solar - Todos os direitos reservados.</p>
         <p className="mt-2 text-gray-500 dark:text-gray-700">CNPJ: 62.612.258/0001-04</p>
       </div>
+
+      {/* Modal Jesus */}
+      {showJesus && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full text-center relative animate-scale-up">
+            <h3 className="text-2xl font-bold text-solar-orange mb-4">Luz do Mundo</h3>
+            <div className="rounded-xl overflow-hidden mb-6 border-4 border-solar-orange/20">
+              <img 
+                src="https://images.unsplash.com/photo-1628516303642-162751147043?q=80&w=1000&auto=format&fit=crop" 
+                alt="Jesus Cristo" 
+                className="w-full h-auto max-h-[60vh] object-cover"
+              />
+            </div>
+            <p className="text-gray-600 dark:text-gray-300 italic mb-6">
+              "Eu sou a luz do mundo; quem me segue não andará em trevas, mas terá a luz da vida."
+            </p>
+            <button 
+              onClick={() => setShowJesus(false)}
+              className="bg-solar-orange text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+              Voltar ao Normal
+            </button>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }

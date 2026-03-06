@@ -6,6 +6,7 @@ interface PortfolioProps {
 
 export default function Portfolio({ isAdmin }: PortfolioProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [toast, setToast] = useState<{ show: boolean, message: string } | null>(null);
   const [projects, setProjects] = useState([
     { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE" },
     { img: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6f?auto=format&fit=crop&q=80&w=800", title: "Indústria Têxtil", loc: "Barbalha, CE" },
@@ -27,6 +28,8 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
     if (window.confirm("Tem certeza que deseja excluir este projeto?")) {
       const newProjects = projects.filter((_, i) => i !== index);
       setProjects(newProjects);
+      setToast({ show: true, message: "Projeto removido com sucesso!" });
+      setTimeout(() => setToast(null), 3000);
     }
   };
 
@@ -118,6 +121,14 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
             Ver Mais Projetos no Instagram
           </a>
         </div>
+
+        {/* Toast Notification */}
+        {toast && toast.show && (
+          <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3 animate-fade-in-up">
+            <i className="fas fa-check-circle text-green-400"></i>
+            <span className="font-medium">{toast.message}</span>
+          </div>
+        )}
       </div>
     </section>
   );
