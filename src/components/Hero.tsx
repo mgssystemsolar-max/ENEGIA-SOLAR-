@@ -61,11 +61,11 @@ export default function Hero() {
             referrerPolicy="no-referrer"
             fetchPriority="high"
           />
-          <div className="mt-6 text-center bg-white/80 dark:bg-solar-card/80 backdrop-blur-sm p-4 rounded-xl border border-gray-100 dark:border-white/10 shadow-lg max-w-md mx-auto">
-            <p className="font-black text-solar-dark dark:text-white text-lg uppercase tracking-wide">
+          <div className="mt-6 text-center bg-solar-card/80 backdrop-blur-sm p-4 rounded-xl border border-white/10 shadow-lg max-w-md mx-auto">
+            <p className="font-black text-white text-lg uppercase tracking-wide">
               <span className="text-solar-orange">MgS SYSTEM SOLAR</span>
             </p>
-            <p className="text-gray-600 dark:text-gray-300 text-sm font-bold mt-1 leading-tight">
+            <p className="text-gray-300 text-sm font-bold mt-1 leading-tight">
               A melhor empresa do Cariri de energia solar com instalação especializada
             </p>
           </div>

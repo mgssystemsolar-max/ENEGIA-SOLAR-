@@ -190,18 +190,18 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project, i) => (
-              <div key={i} className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500">
+              <div key={i} className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]">
                 <img 
                   src={project.img} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
                   referrerPolicy="no-referrer"
                   loading='lazy'
                   width="800"
                   height="600"
                   decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-8">
+                <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
                   <div className="transform translate-y-4 group-hover:translate-y-0 transition duration-500">
                     <h3 className="text-white font-bold text-xl mb-1">{project.title}</h3>
                     <p className="text-solar-orange text-sm font-bold uppercase tracking-wider flex items-center gap-2">
@@ -221,7 +221,7 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
                 {isAdmin && (
                   <button 
                     onClick={(e) => { e.stopPropagation(); handleDeleteProject(i); }}
-                    className="absolute top-4 left-4 bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition z-20"
+                    className="absolute top-4 left-4 bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-all duration-300 z-20 opacity-0 group-hover:opacity-100 transform translate-y-[-10px] group-hover:translate-y-0"
                     title="Excluir Projeto"
                   >
                     <i className="fas fa-trash-alt"></i>

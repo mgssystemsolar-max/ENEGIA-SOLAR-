@@ -21,9 +21,9 @@ export default function MysteryButton({ text = "Curioso? Acesse e verá o Mestre
       {/* Modal Jesus */}
       {showJesus && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in" onClick={() => setShowJesus(false)}>
-          <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full text-center relative animate-scale-up" onClick={e => e.stopPropagation()}>
+          <div className="bg-gray-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full text-center relative animate-scale-up" onClick={e => e.stopPropagation()}>
             <h3 className="text-2xl font-bold text-solar-orange mb-4">Luz do Mundo</h3>
-            <div className="rounded-xl overflow-hidden mb-6 border-4 border-solar-orange/20 bg-gray-100 dark:bg-gray-800 min-h-[300px] flex items-center justify-center">
+            <div className="rounded-xl overflow-hidden mb-6 border-4 border-solar-orange/20 bg-gray-800 min-h-[300px] flex items-center justify-center">
               <img 
                 src="https://lh3.googleusercontent.com/d/1mIm35e8EVRHeIj_5HXMjHJpxZTJrl3Ex" 
                 alt="Jesus Cristo - Luz do Mundo" 
