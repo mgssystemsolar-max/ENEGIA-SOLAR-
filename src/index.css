@@ -7,6 +7,12 @@
   --color-solar-card: #112240;
 }
 
+@layer base {
+  body {
+    @apply bg-solar-dark text-white;
+  }
+}
+
 @layer utilities {
   /* Custom Range Slider */
   .range-lg {
