@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import MysteryButton from './MysteryButton';
 import PortfolioMap from './PortfolioMap';
+import { saveProjectsToDB, loadProjectsFromDB } from '../utils/db';
 
 interface PortfolioProps {
   isAdmin: boolean;
@@ -23,16 +24,19 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
     { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Comércio Local", loc: "Crato, CE" },
   ]);
 
-  // Load projects from localStorage on mount
+  // Load projects from IndexedDB on mount
   useEffect(() => {
-    const savedProjects = localStorage.getItem('mgs_portfolio_projects');
-    if (savedProjects) {
+    const loadProjects = async () => {
       try {
-        setProjects(JSON.parse(savedProjects));
+        const savedProjects = await loadProjectsFromDB();
+        if (savedProjects && savedProjects.length > 0) {
+          setProjects(savedProjects);
+        }
       } catch (e) {
-        console.error("Failed to parse saved projects", e);
+        console.error("Failed to load saved projects from DB", e);
       }
-    }
+    };
+    loadProjects();
   }, []);
 
   // Filter projects based on selected city
@@ -94,8 +98,13 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
         });
 
         const processedProjects = await Promise.all(promises);
-        setProjects(prev => [...prev, ...processedProjects]);
-        setToast({ show: true, message: `${processedProjects.length} fotos adicionadas!` });
+        const updatedProjects = [...projects, ...processedProjects];
+        setProjects(updatedProjects);
+        
+        // Auto-save to DB after upload
+        await saveProjectsToDB(updatedProjects);
+        
+        setToast({ show: true, message: `${processedProjects.length} fotos adicionadas e salvas!` });
       } catch (error) {
         console.error("Erro ao processar imagens", error);
         setToast({ show: true, message: "Erro ao processar algumas imagens." });
@@ -106,21 +115,30 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
     }
   };
 
-  const handleDeleteProject = (index: number) => {
+  const handleDeleteProject = async (index: number) => {
     if (window.confirm("Tem certeza que deseja excluir este projeto?")) {
       const newProjects = projects.filter((_, i) => i !== index);
       setProjects(newProjects);
-      setToast({ show: true, message: "Projeto removido com sucesso!" });
+      
+      // Auto-save to DB after delete
+      try {
+        await saveProjectsToDB(newProjects);
+        setToast({ show: true, message: "Projeto removido com sucesso!" });
+      } catch (e) {
+        setToast({ show: true, message: "Erro ao salvar alterações." });
+      }
+      
       setTimeout(() => setToast(null), 3000);
     }
   };
 
-  const handleSaveProjects = () => {
+  const handleSaveProjects = async () => {
     try {
-      localStorage.setItem('mgs_portfolio_projects', JSON.stringify(projects));
+      await saveProjectsToDB(projects);
       setToast({ show: true, message: "Galeria salva com sucesso!" });
     } catch (e) {
-      setToast({ show: true, message: "Erro: Limite de armazenamento cheio!" });
+      console.error(e);
+      setToast({ show: true, message: "Erro ao salvar no banco de dados local!" });
     }
     setTimeout(() => setToast(null), 3000);
   };
