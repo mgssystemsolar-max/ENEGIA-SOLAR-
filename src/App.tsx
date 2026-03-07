@@ -25,7 +25,7 @@ const ProjectStatus = lazy(() => import('./components/ProjectStatus'));
 
 export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const LOGO_URL = "https://drive.google.com/thumbnail?id=1zkjzrgzcFksMAzqMLPc8ii7CK1-qtmnt&sz=w1000";
 
   useEffect(() => {
