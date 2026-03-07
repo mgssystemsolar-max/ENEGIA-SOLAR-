@@ -25,10 +25,13 @@ const ProjectStatus = lazy(() => import('./components/ProjectStatus'));
 
 export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
+  // Force dark mode to true initially to ensure blue theme
   const [darkMode, setDarkMode] = useState(true);
   const LOGO_URL = "https://drive.google.com/thumbnail?id=1zkjzrgzcFksMAzqMLPc8ii7CK1-qtmnt&sz=w1000";
 
   useEffect(() => {
+    // Save preference, but we forced it to true on load to fix the issue
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -39,7 +42,10 @@ export default function App() {
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-solar-orange selection:text-white transition-colors duration-300 ${darkMode ? 'bg-solar-dark text-white' : 'bg-gray-50 text-gray-900'}`}>
+    <div 
+      className={`min-h-screen font-sans selection:bg-solar-orange selection:text-white transition-colors duration-300 ${darkMode ? 'bg-solar-dark text-white' : 'bg-gray-50 text-gray-900'}`}
+      style={{ backgroundColor: darkMode ? '#0a192f' : '#f9fafb', color: darkMode ? '#ffffff' : '#111827' }}
+    >
       <Header 
         LOGO_URL={LOGO_URL} 
         onAdminLogin={() => setIsAdmin(true)} 
