@@ -5,10 +5,17 @@ interface PortfolioProps {
   isAdmin: boolean;
 }
 
+interface Project {
+  img: string;
+  title: string;
+  loc: string;
+}
+
 export default function Portfolio({ isAdmin }: PortfolioProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [toast, setToast] = useState<{ show: boolean, message: string } | null>(null);
-  const [projects, setProjects] = useState([
+  const [isUploading, setIsUploading] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([
     { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE" },
     { img: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6f?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Indústria Têxtil", loc: "Barbalha, CE" },
     { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Comércio Local", loc: "Crato, CE" },
@@ -26,14 +33,70 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
     }
   }, []);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      const title = prompt("Digite o nome do projeto:") || "Novo Projeto";
-      const loc = prompt("Digite a localização:") || "Cariri, CE";
+  // Helper to resize image and convert to Base64
+  const processImage = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 600;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7)); // Compress to 70% quality
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setIsUploading(true);
+      const newProjects: Project[] = [];
       
-      setProjects(prev => [...prev, { img: imageUrl, title, loc }]);
+      try {
+        // Process all files
+        const promises = Array.from(files).map(async (file) => {
+          const imageUrl = await processImage(file);
+          return {
+            img: imageUrl,
+            title: "Nova Instalação",
+            loc: "Cariri, CE"
+          };
+        });
+
+        const processedProjects = await Promise.all(promises);
+        setProjects(prev => [...prev, ...processedProjects]);
+        setToast({ show: true, message: `${processedProjects.length} fotos adicionadas!` });
+      } catch (error) {
+        console.error("Erro ao processar imagens", error);
+        setToast({ show: true, message: "Erro ao processar algumas imagens." });
+      } finally {
+        setIsUploading(false);
+        setTimeout(() => setToast(null), 3000);
+      }
     }
   };
 
@@ -47,8 +110,12 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
   };
 
   const handleSaveProjects = () => {
-    localStorage.setItem('mgs_portfolio_projects', JSON.stringify(projects));
-    setToast({ show: true, message: "Alterações salvas com sucesso!" });
+    try {
+      localStorage.setItem('mgs_portfolio_projects', JSON.stringify(projects));
+      setToast({ show: true, message: "Galeria salva com sucesso!" });
+    } catch (e) {
+      setToast({ show: true, message: "Erro: Limite de armazenamento cheio!" });
+    }
     setTimeout(() => setToast(null), 3000);
   };
 
@@ -76,12 +143,16 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
         
         {/* Admin Controls */}
         {isAdmin && (
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-end mb-6 gap-4">
+             <div className="text-xs text-gray-500 flex items-center">
+                <i className="fas fa-info-circle mr-1"></i>
+                Dica: Selecione várias fotos de uma vez
+             </div>
             <button 
               onClick={handleSaveProjects}
               className="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-700 transition shadow-lg flex items-center gap-2"
             >
-              <i className="fas fa-save"></i> Salvar Alterações
+              <i className="fas fa-save"></i> Salvar Galeria
             </button>
           </div>
         )}
@@ -139,14 +210,23 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
                 ref={fileInputRef} 
                 onChange={handleImageUpload} 
                 accept="image/*" 
+                multiple
                 className="hidden" 
               />
               <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-white/10 group-hover:bg-solar-orange/10 flex items-center justify-center text-gray-400 dark:text-gray-500 group-hover:text-solar-orange transition-colors duration-300">
-                <i className="fas fa-plus text-2xl"></i>
+                {isUploading ? (
+                   <i className="fas fa-spinner fa-spin text-2xl"></i>
+                ) : (
+                   <i className="fas fa-images text-2xl"></i>
+                )}
               </div>
               <div className="text-center">
-                <h3 className="text-gray-500 dark:text-gray-400 font-bold group-hover:text-solar-orange transition-colors">Adicionar Obra</h3>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Carregar imagem do PC</p>
+                <h3 className="text-gray-500 dark:text-gray-400 font-bold group-hover:text-solar-orange transition-colors">
+                  {isUploading ? "Processando..." : "Adicionar Fotos em Massa"}
+                </h3>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                  {isUploading ? "Aguarde..." : "Selecione várias imagens"}
+                </p>
               </div>
             </div>
           )}

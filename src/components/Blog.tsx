@@ -15,7 +15,7 @@ export default function Blog() {
       title: "Manutenção Preventiva: Garantindo a eficiência do seu sistema",
       category: "Dicas",
       date: "28 Fev 2026",
-      image: "https://images.unsplash.com/photo-1626074961596-e9949709d8f1?auto=format&fit=crop&q=80&w=800",
+      image: "https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&q=80&w=800",
       excerpt: "A sujeira pode reduzir sua geração em até 25%. Saiba qual a frequência ideal de limpeza para a região do Cariri."
     },
     {
