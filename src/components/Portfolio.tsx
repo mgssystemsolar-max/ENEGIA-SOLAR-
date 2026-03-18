@@ -11,6 +11,7 @@ interface Project {
   img: string;
   title: string;
   loc: string;
+  type?: string;
 }
 
 export default function Portfolio({ isAdmin }: PortfolioProps) {
@@ -18,10 +19,11 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
   const [toast, setToast] = useState<{ show: boolean, message: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<string>('Todos');
   const [projects, setProjects] = useState<Project[]>([
-    { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE" },
-    { img: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6f?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Indústria Têxtil", loc: "Barbalha, CE" },
-    { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Comércio Local", loc: "Crato, CE" },
+    { img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Residência Alto Padrão", loc: "Juazeiro do Norte, CE", type: "Residencial" },
+    { img: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6f?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Indústria Têxtil", loc: "Barbalha, CE", type: "Industrial" },
+    { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800&fm=webp", title: "Comércio Local", loc: "Crato, CE", type: "Comercial" },
   ]);
 
   // Load projects from IndexedDB on mount
@@ -39,10 +41,12 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
     loadProjects();
   }, []);
 
-  // Filter projects based on selected city
-  const filteredProjects = selectedCity 
-    ? projects.filter(p => p.loc.includes(selectedCity))
-    : projects;
+  // Filter projects based on selected city and type
+  const filteredProjects = projects.filter(p => {
+    const matchCity = selectedCity ? p.loc.includes(selectedCity) : true;
+    const matchType = selectedType === 'Todos' ? true : (p.type === selectedType || (!p.type && selectedType === 'Outros'));
+    return matchCity && matchType;
+  });
 
   // Helper to resize image and convert to Base64
   const processImage = (file: File): Promise<string> => {
@@ -93,7 +97,8 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
           return {
             img: imageUrl,
             title: "Nova Instalação",
-            loc: "Cariri, CE"
+            loc: "Cariri, CE",
+            type: "Residencial"
           };
         });
 
@@ -171,6 +176,23 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
           onSelectCity={setSelectedCity} 
         />
         
+        {/* Project Type Filters */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {['Todos', 'Residencial', 'Comercial', 'Industrial'].map((type) => (
+            <button
+              key={type}
+              onClick={() => setSelectedType(type)}
+              className={`px-6 py-2 rounded-full font-bold transition-all duration-300 ${
+                selectedType === type 
+                  ? 'bg-solar-orange text-white shadow-lg shadow-solar-orange/30' 
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+        
         {/* Admin Controls */}
         {isAdmin && (
           <div className="flex justify-end mb-6 gap-4">
@@ -204,8 +226,13 @@ export default function Portfolio({ isAdmin }: PortfolioProps) {
                 <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
                   <div className="transform translate-y-4 group-hover:translate-y-0 transition duration-500">
                     <h3 className="text-white font-bold text-xl mb-1">{project.title}</h3>
-                    <p className="text-solar-orange text-sm font-bold uppercase tracking-wider flex items-center gap-2">
-                      <i className="fas fa-map-marker-alt"></i> {project.loc}
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="bg-solar-orange/20 text-solar-orange text-xs font-bold px-2 py-1 rounded border border-solar-orange/30">
+                        {project.type || 'Outros'}
+                      </span>
+                    </div>
+                    <p className="text-gray-300 text-sm font-bold uppercase tracking-wider flex items-center gap-2">
+                      <i className="fas fa-map-marker-alt text-solar-orange"></i> {project.loc}
                     </p>
                   </div>
                 </div>

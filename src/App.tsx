@@ -21,6 +21,7 @@ const EquipmentCenter = lazy(() => import('./components/EquipmentCenter'));
 const Catalog = lazy(() => import('./components/Catalog'));
 const HotmartBanner = lazy(() => import('./components/HotmartBanner'));
 const FAQ = lazy(() => import('./components/FAQ'));
+const AiImageGenerator = lazy(() => import('./components/AiImageGenerator'));
 const PostSales = lazy(() => import('./components/PostSales'));
 const Emergency = lazy(() => import('./components/Emergency'));
 const Contact = lazy(() => import('./components/Contact'));
@@ -69,6 +70,7 @@ export default function App() {
         <EquipmentCenter />
         <Catalog />
         <HotmartBanner />
+        {isAdmin && <AiImageGenerator />}
         <FAQ />
         <PostSales />
         <Emergency />

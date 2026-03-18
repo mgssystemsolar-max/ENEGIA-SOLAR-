@@ -4,6 +4,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     whatsapp: '',
+    email: '',
     city: '',
     concessionaria: '',
     billValue: ''
@@ -11,6 +12,7 @@ export default function Contact() {
   const [formErrors, setFormErrors] = useState({
     name: '',
     whatsapp: '',
+    email: '',
     city: '',
     billValue: ''
   });
@@ -24,6 +26,11 @@ export default function Contact() {
       if (!value.trim()) return 'WhatsApp é obrigatório';
       const cleanPhone = value.replace(/\D/g, '');
       if (cleanPhone.length < 10) return 'Número inválido (mínimo 10 dígitos)';
+    }
+    if (name === 'email') {
+      if (!value.trim()) return 'E-mail é obrigatório';
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) return 'Formato de e-mail inválido';
     }
     if (name === 'city') {
       if (!value.trim()) return 'Cidade/UF é obrigatório';
@@ -54,6 +61,7 @@ export default function Contact() {
     const newErrors = {
       name: validateField('name', formData.name),
       whatsapp: validateField('whatsapp', formData.whatsapp),
+      email: validateField('email', formData.email),
       city: validateField('city', formData.city),
       billValue: validateField('billValue', formData.billValue)
     };
@@ -65,7 +73,7 @@ export default function Contact() {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      const message = `Olá, meu nome é ${formData.name}. Sou de ${formData.city}. Minha conta de luz é R$ ${formData.billValue} (${formData.concessionaria}). Gostaria de um orçamento.`;
+      const message = `Olá, meu nome é ${formData.name}. Meu e-mail é ${formData.email}. Sou de ${formData.city}. Minha conta de luz é R$ ${formData.billValue} (${formData.concessionaria}). Gostaria de um orçamento.`;
       const encodedMessage = encodeURIComponent(message);
       window.open(`https://wa.me/message/24V75JFH4PNMB1?text=${encodedMessage}`, "_blank");
     }
@@ -110,6 +118,19 @@ export default function Contact() {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-300 ml-1">E-mail <span className="text-red-500">*</span></label>
+                <input 
+                  type="email" 
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                  placeholder="seu@email.com" 
+                  className={`w-full bg-solar-dark border ${formErrors.email ? 'border-red-500' : 'border-gray-700'} rounded-xl px-4 py-3 focus:outline-none focus:border-solar-orange focus:ring-1 focus:ring-solar-orange transition text-white`} 
+                />
+                {formErrors.email && <p className="text-red-500 text-xs ml-1">{formErrors.email}</p>}
+              </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-gray-300 ml-1">Cidade/UF <span className="text-red-500">*</span></label>
                 <input 
