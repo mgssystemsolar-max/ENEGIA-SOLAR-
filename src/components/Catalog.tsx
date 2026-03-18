@@ -32,16 +32,20 @@ export default function Catalog() {
               </div>
             )}
             
-            <iframe 
-              src="https://9gdb5g3.spread.name" 
-              width="100%" 
-              height="900" 
-              frameBorder="0" 
-              loading="lazy"
-              onLoad={() => setIsLoading(false)}
-              className={`block w-full relative z-10 transition-opacity duration-500 bg-white ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-              title="Catálogo MGS System Solar"
-            ></iframe>
+            {/* Wrapper para esconder a marca d'água do SpreadSimple cortando o final do iframe */}
+            <div className="w-full h-[900px] overflow-hidden relative z-10">
+              <iframe 
+                src="https://9gdb5g3.spread.name" 
+                width="100%" 
+                height="960" /* Altura maior que o container para esconder o rodapé */
+                frameBorder="0" 
+                loading="lazy"
+                onLoad={() => setIsLoading(false)}
+                className={`block w-full absolute top-0 left-0 transition-opacity duration-500 bg-white ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                title="Catálogo MGS System Solar"
+                style={{ marginTop: '-10px' }} /* Ajuste fino se necessário */
+              ></iframe>
+            </div>
           </div>
           
           <p className="mt-8 text-sm text-gray-500 italic">
