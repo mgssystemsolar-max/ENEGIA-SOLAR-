@@ -22,6 +22,7 @@ export default function Hero() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const calculateSavings = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,9 +44,14 @@ export default function Hero() {
 
   const handleWhatsApp = () => {
     if (!result) return;
-    const text = `Olá! Meu nome é ${name}, sou de ${city}. Minha conta de energia é R$ ${bill} e vi no simulador que preciso de um sistema de ${result.systemSize}kWp (${result.panels} placas). Gostaria de um orçamento detalhado. Meu telefone é ${phone}.`;
-    const encodedText = encodeURIComponent(text);
-    window.open(`https://wa.me/message/24V75JFH4PNMB1?text=${encodedText}`, '_blank');
+    setIsRedirecting(true);
+    
+    setTimeout(() => {
+      const text = `Olá! Meu nome é ${name}, sou de ${city}. Minha conta de energia é R$ ${bill} e vi no simulador que preciso de um sistema de ${result.systemSize}kWp (${result.panels} placas). Gostaria de um orçamento detalhado. Meu telefone é ${phone}.`;
+      const encodedText = encodeURIComponent(text);
+      window.open(`https://wa.me/message/24V75JFH4PNMB1?text=${encodedText}`, '_blank');
+      setIsRedirecting(false);
+    }, 1500);
   };
 
   return (
@@ -188,9 +194,15 @@ export default function Hero() {
                   </button>
                   <button 
                     onClick={handleWhatsApp}
-                    className="w-2/3 bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition-colors shadow-lg shadow-green-500/30 flex items-center justify-center gap-2"
+                    disabled={isRedirecting}
+                    className="w-2/3 bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition-colors shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    <i className="fab fa-whatsapp text-xl"></i> Receber Proposta
+                    {isRedirecting ? (
+                      <i className="fas fa-spinner fa-spin text-xl"></i>
+                    ) : (
+                      <i className="fab fa-whatsapp text-xl"></i>
+                    )}
+                    {isRedirecting ? 'Conectando...' : 'Receber Proposta'}
                   </button>
                 </div>
               </div>
