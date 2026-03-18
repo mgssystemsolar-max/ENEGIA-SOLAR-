@@ -16,11 +16,19 @@ export default function Footer({ LOGO_URL }: FooterProps) {
         </div>
         <div>
           <h4 className="font-bold text-lg mb-6 border-l-4 border-solar-orange pl-4 uppercase text-white">Redes Sociais</h4>
-          <div className="flex justify-center md:justify-start space-x-6 text-2xl text-solar-orange">
-            <a href="https://www.instagram.com/marciogoncalvesda176/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><i className="fab fa-instagram"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=61577300515359&locale=pt_BR" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><i className="fab fa-facebook"></i></a>
-            <a href="https://www.youtube.com/channel/UCQGzIxvn_I1uqved_psc9oQ" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><i className="fab fa-youtube"></i></a>
-            <a href="https://wa.me/message/24V75JFH4PNMB1" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><i className="fab fa-whatsapp"></i></a>
+          <div className="flex flex-col items-center md:items-start space-y-4 text-gray-400">
+            <a href="https://www.instagram.com/marciogoncalvesda176/" target="_blank" rel="noopener noreferrer" className="hover:text-solar-orange transition flex items-center gap-3">
+              <i className="fab fa-instagram text-2xl text-solar-orange w-6 text-center"></i> Instagram
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61577300515359&locale=pt_BR" target="_blank" rel="noopener noreferrer" className="hover:text-solar-orange transition flex items-center gap-3">
+              <i className="fab fa-facebook text-2xl text-solar-orange w-6 text-center"></i> Facebook
+            </a>
+            <a href="https://www.youtube.com/channel/UCQGzIxvn_I1uqved_psc9oQ" target="_blank" rel="noopener noreferrer" className="hover:text-solar-orange transition flex items-center gap-3">
+              <i className="fab fa-youtube text-2xl text-solar-orange w-6 text-center"></i> YouTube
+            </a>
+            <a href="https://wa.me/message/24V75JFH4PNMB1" target="_blank" rel="noopener noreferrer" className="hover:text-solar-orange transition flex items-center gap-3">
+              <i className="fab fa-whatsapp text-2xl text-solar-orange w-6 text-center"></i> WhatsApp
+            </a>
           </div>
         </div>
         <div>
