@@ -17,6 +17,7 @@ const Expertise = lazy(() => import('./components/Expertise'));
 const SolarKnowledge = lazy(() => import('./components/SolarKnowledge'));
 const MgsAcademy = lazy(() => import('./components/MgsAcademy'));
 const Financing = lazy(() => import('./components/Financing'));
+const EquipmentCenter = lazy(() => import('./components/EquipmentCenter'));
 const FAQ = lazy(() => import('./components/FAQ'));
 const PostSales = lazy(() => import('./components/PostSales'));
 const Emergency = lazy(() => import('./components/Emergency'));
@@ -50,7 +51,6 @@ export default function App() {
       <Hero />
 
       <Suspense fallback={<div className="py-20 text-center text-gray-400">Carregando...</div>}>
-        <Calculator />
         <SolarGuide />
         <Partners />
         <AboutUs />
@@ -64,6 +64,7 @@ export default function App() {
         <SolarKnowledge />
         <MgsAcademy />
         <Financing />
+        <EquipmentCenter />
         <FAQ />
         <PostSales />
         <Emergency />
